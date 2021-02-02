@@ -1,0 +1,22 @@
+{
+	"name": "ds_adlb_dbug_target",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sink_to_abls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "storedata",
+				"container": "py-src"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
