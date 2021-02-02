@@ -1,0 +1,27 @@
+{
+	"name": "inputdata_dbug",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sink_to_abls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "VNU.DBUG.txt",
+				"folderPath": "storedata",
+				"container": "py-src"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"type": "String"
+			}
+		]
+	}
+}
