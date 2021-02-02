@@ -11,6 +11,9 @@
 		"ls_sink_to_abls_connectionString": {
 			"value": ""
 		},
+		"trig_evt_pl_demo_properties_typeProperties_scope": {
+			"value": "/subscriptions/2ffa227f-4f09-47be-952b-b1a2fdb03d34/resourceGroups/dev_rg/providers/Microsoft.Storage/storageAccounts/pysparkstg"
+		},
 		"containerUri": {
 			"value": ""
 		},

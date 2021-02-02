@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_sink_to_abls'"
 		},
+		"trig_evt_pl_demo_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/2ffa227f-4f09-47be-952b-b1a2fdb03d34/resourceGroups/dev_rg/providers/Microsoft.Storage/storageAccounts/pysparkstg"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -47,6 +51,9 @@
 					},
 					"lk_sr_to_oracle_onprem_connectionString": {
 						"value": "[parameters('lk_sr_to_oracle_onprem_connectionString')]"
+					},
+					"trig_evt_pl_demo_properties_typeProperties_scope": {
+						"value": "[parameters('trig_evt_pl_demo_properties_typeProperties_scope')]"
 					}
 				}
 			},

@@ -14,6 +14,10 @@
 		"ls_sink_to_abls_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_sink_to_abls'"
+		},
+		"trig_evt_pl_demo_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/2ffa227f-4f09-47be-952b-b1a2fdb03d34/resourceGroups/dev_rg/providers/Microsoft.Storage/storageAccounts/pysparkstg"
 		}
 	},
 	"variables": {
@@ -357,6 +361,38 @@
 						"endTime": "2021-02-03T00:08:00",
 						"timeZone": "India Standard Time"
 					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ablb_to_ablb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trig_evt_pl_demo')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ablb_to_ablb",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/py-src/blobs/'storeoutput/'",
+					"blobPathEndsWith": "'outdbug.txt'",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('trig_evt_pl_demo_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated",
+						"Microsoft.Storage.BlobDeleted"
+					]
 				}
 			},
 			"dependsOn": [
