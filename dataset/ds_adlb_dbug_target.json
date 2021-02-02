@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "debug.csv",
+				"fileName": "VNU.DBUG.txt",
 				"folderPath": "storedata",
 				"container": "py-src"
 			},
