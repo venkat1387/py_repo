@@ -1,0 +1,26 @@
+{
+	"name": "trig_evt_pl_demo",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_ablb_to_ablb",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/py-src/blobs/'storeoutput/'",
+			"blobPathEndsWith": "'outdbug.txt'",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/2ffa227f-4f09-47be-952b-b1a2fdb03d34/resourceGroups/dev_rg/providers/Microsoft.Storage/storageAccounts/pysparkstg",
+			"events": [
+				"Microsoft.Storage.BlobCreated",
+				"Microsoft.Storage.BlobDeleted"
+			]
+		}
+	}
+}
