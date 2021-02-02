@@ -2,7 +2,7 @@
 	"name": "trig_evt_pl_demo",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
