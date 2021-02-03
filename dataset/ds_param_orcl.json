@@ -3,7 +3,13 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_param_db",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"p_host": "47.90.97.245:1521",
+				"p_sid": "s460",
+				"p_user": "vnu",
+				"p_pwd": "MFkkmam08z3q7x0l5x0oml5pdpm7bm"
+			}
 		},
 		"parameters": {
 			"p_tablename_dataset": {
