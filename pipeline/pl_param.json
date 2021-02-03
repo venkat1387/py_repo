@@ -52,7 +52,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "output_dbug",
+						"referenceName": "ds_adlb_dbug_target",
 						"type": "DatasetReference"
 					}
 				]
