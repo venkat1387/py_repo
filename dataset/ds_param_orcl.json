@@ -1,5 +1,5 @@
 {
-	"name": "OracleTable1",
+	"name": "ds_param_orcl",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_param_db",
