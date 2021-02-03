@@ -1,0 +1,29 @@
+{
+	"name": "ls_param_db",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"p_host": {
+				"type": "string"
+			},
+			"p_sid": {
+				"type": "string"
+			},
+			"p_user": {
+				"type": "string"
+			},
+			"p_pwd": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Oracle",
+		"typeProperties": {
+			"connectionString": "host=@{linkedService().p_host};port=1521;sid=@{linkedService().p_sid};user id=@{linkedService().p_user};Password=@{linkedService().p_pwd}"
+		},
+		"connectVia": {
+			"referenceName": "SelfHosted-IR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
