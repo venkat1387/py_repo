@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'lk_sr_to_oracle_onprem'"
 		},
+		"ls_param_db_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_param_db'"
+		},
 		"trig_evt_pl_demo_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/2ffa227f-4f09-47be-952b-b1a2fdb03d34/resourceGroups/dev_rg/providers/Microsoft.Storage/storageAccounts/pysparkstg"
@@ -174,6 +178,39 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_param_db')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"p_host": {
+						"type": "string"
+					},
+					"p_sid": {
+						"type": "string"
+					},
+					"p_user": {
+						"type": "string"
+					},
+					"p_pwd": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Oracle",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_param_db_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "SelfHosted-IR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/SelfHosted-IR')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_ablb_to_ablb')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -266,6 +303,41 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/lk_sr_to_oracle_onprem')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_param_orcl')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_param_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"p_host": "47.90.97.245",
+						"p_sid": "s460",
+						"p_user": "vnu",
+						"p_pwd": "MFkkmam08z3q7x0l5x0oml5pdpm7bm"
+					}
+				},
+				"parameters": {
+					"p_tablename_dataset": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "OracleTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "vnu",
+					"table": {
+						"value": "@dataset().p_tablename_dataset",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_param_db')]"
 			]
 		},
 		{
@@ -397,6 +469,76 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pl_ablb_to_ablb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_param')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "copy_data_from_param",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "OracleSource",
+								"partitionOption": "None",
+								"queryTimeout": "02:00:00"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_param_orcl",
+								"type": "DatasetReference",
+								"parameters": {
+									"p_tablename_dataset": "dbug"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adlb_dbug_target",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_param_orcl')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adlb_dbug_target')]"
 			]
 		}
 	]
