@@ -44,7 +44,10 @@
 				"inputs": [
 					{
 						"referenceName": "ds_param_orcl",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"p_tablename_dataset": "dbug"
+						}
 					}
 				],
 				"outputs": [
