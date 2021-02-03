@@ -1,0 +1,24 @@
+{
+	"name": "OracleTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_param_db",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_tablename_dataset": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "OracleTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "vnu",
+			"table": {
+				"value": "@dataset().p_tablename_dataset",
+				"type": "Expression"
+			}
+		}
+	}
+}
