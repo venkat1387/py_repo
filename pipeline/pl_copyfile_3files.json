@@ -69,7 +69,7 @@
 			}
 		],
 		"parameters": {
-			"arrayValues": {
+			"arrayValue": {
 				"type": "array",
 				"defaultValue": "['ouput1','output2','output3']"
 			}
