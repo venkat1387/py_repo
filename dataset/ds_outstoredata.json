@@ -1,0 +1,19 @@
+{
+	"name": "ds_outstoredata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sink_to_abls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "dbug.txt",
+				"folderPath": "outstoredata",
+				"container": "py-src"
+			}
+		}
+	}
+}
