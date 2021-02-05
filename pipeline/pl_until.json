@@ -9,7 +9,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@bool(pipeline().parameters.fileAvailable)",
+						"value": "@bool(variables('fileAvailable'))",
 						"type": "Expression"
 					},
 					"activities": [
@@ -56,15 +56,30 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@bool(activity('Get Metadata1').output.exists)",
+									"value": "@bool(activity('Get Metadata1').output.Exists)",
 									"type": "Expression"
 								},
+								"ifFalseActivities": [
+									{
+										"name": "Wait1",
+										"type": "Wait",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 10
+										}
+									}
+								],
 								"ifTrueActivities": [
 									{
 										"name": "Set variable1",
 										"type": "SetVariable",
 										"dependsOn": [],
-										"userProperties": []
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "fileAvailable",
+											"value": "true"
+										}
 									}
 								]
 							}
@@ -74,9 +89,9 @@
 				}
 			}
 		],
-		"parameters": {
+		"variables": {
 			"fileAvailable": {
-				"type": "string",
+				"type": "String",
 				"defaultValue": "false"
 			}
 		},
