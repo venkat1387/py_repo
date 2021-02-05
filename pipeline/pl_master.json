@@ -1,0 +1,30 @@
+{
+	"name": "pl_master",
+	"properties": {
+		"activities": [
+			{
+				"name": "execute_pipe",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [
+					{
+						"name": "src_loc",
+						"value": "input/dbug"
+					},
+					{
+						"name": "des_loc",
+						"value": "output/dbug"
+					}
+				],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_ablb_to_ablb",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": []
+	}
+}
