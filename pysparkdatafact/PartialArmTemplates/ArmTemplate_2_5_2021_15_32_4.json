@@ -1,0 +1,49 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "pysparkdatafact"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_master')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "execute_pipe",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [
+							{
+								"name": "src_loc",
+								"value": "input/dbug"
+							},
+							{
+								"name": "des_loc",
+								"value": "output/dbug"
+							}
+						],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_ablb_to_ablb",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": []
+		}
+	]
+}

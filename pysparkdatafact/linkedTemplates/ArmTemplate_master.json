@@ -11,13 +11,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'lk_sr_to_oracle_onprem'"
 		},
-		"ls_sink_to_abls_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_sink_to_abls'"
-		},
 		"ls_param_db_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_param_db'"
+		},
+		"ls_sink_to_abls_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sink_to_abls'"
 		},
 		"trig_evt_pl_demo_properties_typeProperties_scope": {
 			"type": "string",

@@ -409,69 +409,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_pl_demo')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_ablb_to_ablb",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Minute",
-						"interval": 2,
-						"startTime": "2021-02-03T01:20:00",
-						"endTime": "2021-02-03T01:28:00",
-						"timeZone": "India Standard Time"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_ablb_to_ablb')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/trig_evt_pl_demo')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_ablb_to_ablb",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "BlobEventsTrigger",
-				"typeProperties": {
-					"blobPathBeginsWith": "/py-src/blobs/'storeoutput/'",
-					"blobPathEndsWith": "'outdbug.txt'",
-					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('trig_evt_pl_demo_properties_typeProperties_scope')]",
-					"events": [
-						"Microsoft.Storage.BlobCreated",
-						"Microsoft.Storage.BlobDeleted"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_ablb_to_ablb')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/pl_param')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -539,6 +476,105 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_param_orcl')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adlb_dbug_target')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_pl_demo')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ablb_to_ablb",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 2,
+						"startTime": "2021-02-03T01:20:00",
+						"endTime": "2021-02-03T01:28:00",
+						"timeZone": "India Standard Time"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ablb_to_ablb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trig_evt_pl_demo')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_ablb_to_ablb",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/py-src/blobs/'storeoutput/'",
+					"blobPathEndsWith": "'outdbug.txt'",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('trig_evt_pl_demo_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated",
+						"Microsoft.Storage.BlobDeleted"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ablb_to_ablb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_master')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "execute_pipe",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [
+							{
+								"name": "src_loc",
+								"value": "input/dbug"
+							},
+							{
+								"name": "des_loc",
+								"value": "output/dbug"
+							}
+						],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_ablb_to_ablb",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_ablb_to_ablb')]"
 			]
 		}
 	]
