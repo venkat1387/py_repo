@@ -292,16 +292,18 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ds_storedata",
+								"referenceName": "ds_outstoredata",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_outstoredata",
+								"referenceName": "ouputfolder",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"outputFolder": "untlfolder"
+								}
 							}
 						]
 					}

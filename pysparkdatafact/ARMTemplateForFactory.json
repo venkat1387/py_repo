@@ -1140,16 +1140,18 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ds_storedata",
+								"referenceName": "ds_outstoredata",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_outstoredata",
+								"referenceName": "ouputfolder",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"outputFolder": "untlfolder"
+								}
 							}
 						]
 					}
@@ -1163,8 +1165,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_storedata')]",
 				"[concat(variables('factoryId'), '/datasets/ds_outstoredata')]",
+				"[concat(variables('factoryId'), '/datasets/ouputfolder')]",
 				"[concat(variables('factoryId'), '/datasets/inputdata_dbug')]"
 			]
 		},
