@@ -27,14 +27,13 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "DelimitedTextSource",
+									"type": "BinarySource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
+										"recursive": true
 									},
 									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
+										"type": "BinaryReadSettings"
 									}
 								},
 								"sink": {
@@ -47,7 +46,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_adlb_dbug_target",
+									"referenceName": "ds_input_binary_data",
 									"type": "DatasetReference"
 								}
 							],
@@ -80,14 +79,13 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "DelimitedTextSource",
+									"type": "BinarySource",
 									"storeSettings": {
 										"type": "AzureBlobStorageReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
+										"recursive": true
 									},
 									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
+										"type": "BinaryReadSettings"
 									}
 								},
 								"sink": {
@@ -100,7 +98,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ds_adlb_dbug_target",
+									"referenceName": "ds_input_binary_data",
 									"type": "DatasetReference"
 								}
 							],
