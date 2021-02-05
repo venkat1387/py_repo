@@ -71,7 +71,7 @@
 		"parameters": {
 			"arrayValues": {
 				"type": "array",
-				"defaultValue": "ouput1,output2,output3"
+				"defaultValue": "['ouput1','output2','output3']"
 			}
 		},
 		"annotations": []
