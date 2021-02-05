@@ -394,7 +394,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "dbug.txt",
+						"fileName": "cricket.txt",
 						"folderPath": "outstoredata",
 						"container": "py-src"
 					}

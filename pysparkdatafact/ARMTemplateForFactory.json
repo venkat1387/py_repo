@@ -1038,7 +1038,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"dataset": {
-											"referenceName": "inputdata_dbug",
+											"referenceName": "ds_outstoredata",
 											"type": "DatasetReference",
 											"parameters": {}
 										},
@@ -1050,7 +1050,7 @@
 											"enablePartitionDiscovery": false
 										},
 										"formatSettings": {
-											"type": "DelimitedTextReadSettings"
+											"type": "BinaryReadSettings"
 										}
 									}
 								},
@@ -1068,7 +1068,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"expression": {
-											"value": "@bool(activity('Get Metadata1').output.Exists)",
+											"value": "@bool(activity('Get Metadata1').output.exists)",
 											"type": "Expression"
 										},
 										"ifFalseActivities": [
@@ -1166,8 +1166,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_outstoredata')]",
-				"[concat(variables('factoryId'), '/datasets/ouputfolder')]",
-				"[concat(variables('factoryId'), '/datasets/inputdata_dbug')]"
+				"[concat(variables('factoryId'), '/datasets/ouputfolder')]"
 			]
 		},
 		{
@@ -1268,7 +1267,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "dbug.txt",
+						"fileName": "cricket.txt",
 						"folderPath": "outstoredata",
 						"container": "py-src"
 					}
