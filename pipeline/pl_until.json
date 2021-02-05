@@ -56,7 +56,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@bool(activity('Get Metadata1').output.Exists)",
+									"value": "@bool(activity('Get Metadata1').output.exists)",
 									"type": "Expression"
 								},
 								"ifFalseActivities": [
