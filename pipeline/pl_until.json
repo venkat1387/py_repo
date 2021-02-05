@@ -128,17 +128,14 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_input_binary_data",
+						"referenceName": "ds_storedata",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ouputfolder",
-						"type": "DatasetReference",
-						"parameters": {
-							"outputFolder": "untloutput"
-						}
+						"referenceName": "ds_outstoredata",
+						"type": "DatasetReference"
 					}
 				]
 			}
