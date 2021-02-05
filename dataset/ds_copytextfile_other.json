@@ -1,0 +1,19 @@
+{
+	"name": "ds_copytextfile_other",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sink_to_abls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "VNU.DBUG.txt",
+				"folderPath": "storedata",
+				"container": "py-src"
+			}
+		}
+	}
+}
