@@ -27,7 +27,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"dataset": {
-									"referenceName": "inputdata_dbug",
+									"referenceName": "ds_outstoredata",
 									"type": "DatasetReference"
 								},
 								"fieldList": [
@@ -38,7 +38,7 @@
 									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
+									"type": "BinaryReadSettings"
 								}
 							}
 						},
