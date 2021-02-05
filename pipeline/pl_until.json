@@ -109,14 +109,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "DelimitedTextSource",
+						"type": "BinarySource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
+							"recursive": true
 						},
 						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
+							"type": "BinaryReadSettings"
 						}
 					},
 					"sink": {
@@ -129,7 +128,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "inputdata_dbug",
+						"referenceName": "ds_input_binary_data",
 						"type": "DatasetReference"
 					}
 				],
