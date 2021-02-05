@@ -1,5 +1,5 @@
 {
-	"name": "Binary1",
+	"name": "ds_copy_output",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sink_to_abls",
