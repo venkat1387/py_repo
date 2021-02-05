@@ -47,7 +47,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "inputdata_dbug",
+									"referenceName": "ds_adlb_dbug_target",
 									"type": "DatasetReference"
 								}
 							],
@@ -100,7 +100,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "inputdata_dbug",
+									"referenceName": "ds_adlb_dbug_target",
 									"type": "DatasetReference"
 								}
 							],
