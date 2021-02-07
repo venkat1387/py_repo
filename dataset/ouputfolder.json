@@ -15,10 +15,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": {
-					"value": "@dataset().outputFolder",
-					"type": "Expression"
-				},
 				"container": "py-src"
 			}
 		}
