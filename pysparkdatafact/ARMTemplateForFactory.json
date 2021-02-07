@@ -657,6 +657,152 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_switch')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Switch1",
+						"type": "Switch",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"on": {
+								"value": "@pipeline().parameters.Folder",
+								"type": "Expression"
+							},
+							"cases": [
+								{
+									"value": "output1",
+									"activities": [
+										{
+											"name": "Copy data1",
+											"type": "Copy",
+											"dependsOn": [],
+											"policy": {
+												"timeout": "7.00:00:00",
+												"retry": 0,
+												"retryIntervalInSeconds": 30,
+												"secureOutput": false,
+												"secureInput": false
+											},
+											"userProperties": [],
+											"typeProperties": {
+												"source": {
+													"type": "BinarySource",
+													"storeSettings": {
+														"type": "AzureBlobStorageReadSettings",
+														"recursive": true
+													},
+													"formatSettings": {
+														"type": "BinaryReadSettings"
+													}
+												},
+												"sink": {
+													"type": "BinarySink",
+													"storeSettings": {
+														"type": "AzureBlobStorageWriteSettings"
+													}
+												},
+												"enableStaging": false
+											},
+											"inputs": [
+												{
+													"referenceName": "ds_storedata",
+													"type": "DatasetReference",
+													"parameters": {}
+												}
+											],
+											"outputs": [
+												{
+													"referenceName": "ouputfolder",
+													"type": "DatasetReference",
+													"parameters": {
+														"outputFolder": {
+															"value": "@pipeline().parameters.Folder",
+															"type": "Expression"
+														}
+													}
+												}
+											]
+										}
+									]
+								},
+								{
+									"value": "output2",
+									"activities": [
+										{
+											"name": "Copy data2",
+											"type": "Copy",
+											"dependsOn": [],
+											"policy": {
+												"timeout": "7.00:00:00",
+												"retry": 0,
+												"retryIntervalInSeconds": 30,
+												"secureOutput": false,
+												"secureInput": false
+											},
+											"userProperties": [],
+											"typeProperties": {
+												"source": {
+													"type": "BinarySource",
+													"storeSettings": {
+														"type": "AzureBlobStorageReadSettings",
+														"recursive": true
+													},
+													"formatSettings": {
+														"type": "BinaryReadSettings"
+													}
+												},
+												"sink": {
+													"type": "BinarySink",
+													"storeSettings": {
+														"type": "AzureBlobStorageWriteSettings"
+													}
+												},
+												"enableStaging": false
+											},
+											"inputs": [
+												{
+													"referenceName": "ds_storedata",
+													"type": "DatasetReference",
+													"parameters": {}
+												}
+											],
+											"outputs": [
+												{
+													"referenceName": "ouputfolder",
+													"type": "DatasetReference",
+													"parameters": {
+														"outputFolder": {
+															"value": "@pipeline().parameters.Folder",
+															"type": "Expression"
+														}
+													}
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"parameters": {
+					"Folder": {
+						"type": "string",
+						"defaultValue": "output1"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_storedata')]",
+				"[concat(variables('factoryId'), '/datasets/ouputfolder')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_until')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -820,6 +966,52 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_web')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Web1",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "http://dummy.restapiexample.com/api/v1/create",
+							"connectVia": {
+								"referenceName": "AutoResolveIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"method": "POST",
+							"headers": {
+								"json_name": "app_json"
+							},
+							"body": {
+								"status": "success",
+								"data": {
+									"name": "test",
+									"salary": "123",
+									"age": "23",
+									"id": 25
+								}
+							}
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_adlb_dbug_target')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -897,6 +1089,138 @@
 						"container": "py-src"
 					}
 				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_dept')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_to_abls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "dept.csv",
+						"folderPath": "input",
+						"container": "py-src"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Deptno",
+						"type": "String"
+					},
+					{
+						"name": "Dname",
+						"type": "String"
+					},
+					{
+						"name": "Loc",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_emp')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_to_abls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "emp.csv",
+						"folderPath": "input",
+						"container": "py-src"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "EMPNO",
+						"type": "String"
+					},
+					{
+						"name": "ENAME",
+						"type": "String"
+					},
+					{
+						"name": "JOB",
+						"type": "String"
+					},
+					{
+						"name": "MGR",
+						"type": "String"
+					},
+					{
+						"name": "HIREDATE",
+						"type": "String"
+					},
+					{
+						"name": "SAL",
+						"type": "String"
+					},
+					{
+						"name": "COMM",
+						"type": "String"
+					},
+					{
+						"name": "DEPTNO",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_empdeptdemo')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_to_abls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "output",
+						"container": "py-src"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
@@ -1081,10 +1405,6 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": {
-							"value": "@dataset().outputFolder",
-							"type": "Expression"
-						},
 						"container": "py-src"
 					}
 				}
@@ -1279,189 +1599,49 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_web')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/d_flow_demo')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "Web1",
-						"type": "WebActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_emp",
+								"type": "DatasetReference"
+							},
+							"name": "empsrc"
 						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "http://dummy.restapiexample.com/api/v1/create",
-							"connectVia": {
-								"referenceName": "AutoResolveIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
+						{
+							"dataset": {
+								"referenceName": "ds_dept",
+								"type": "DatasetReference"
 							},
-							"method": "POST",
-							"headers": {
-								"json_name": "app_json"
-							},
-							"body": {
-								"status": "success",
-								"data": {
-									"name": "test",
-									"salary": "123",
-									"age": "23",
-									"id": 25
-								}
-							}
+							"name": "deptsrc"
 						}
-					}
-				],
-				"annotations": []
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_empdeptdemo",
+								"type": "DatasetReference"
+							},
+							"name": "empdeptoutput"
+						}
+					],
+					"transformations": [
+						{
+							"name": "empdeptjoin"
+						}
+					],
+					"script": "source(output(\n\t\tEMPNO as string,\n\t\tENAME as string,\n\t\tJOB as string,\n\t\tMGR as string,\n\t\tHIREDATE as string,\n\t\tSAL as string,\n\t\tCOMM as string,\n\t\tDEPTNO as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> empsrc\nsource(output(\n\t\tDeptno as string,\n\t\tDname as string,\n\t\tLoc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> deptsrc\nempsrc, deptsrc join(empsrc@DEPTNO == deptsrc@Deptno,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> empdeptjoin\nempdeptjoin sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['empdeptdemo'],\n\tmapColumn(\n\t\tEMPNO,\n\t\tENAME,\n\t\tJOB,\n\t\tDeptno = deptsrc@Deptno,\n\t\tDname,\n\t\tLoc\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapOutputs: true) ~> empdeptoutput"
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_switch')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Switch1",
-						"type": "Switch",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"on": {
-								"value": "@pipeline().parameters.Folder",
-								"type": "Expression"
-							},
-							"cases": [
-								{
-									"value": "Case1",
-									"activities": [
-										{
-											"name": "Copy data1",
-											"type": "Copy",
-											"dependsOn": [],
-											"policy": {
-												"timeout": "7.00:00:00",
-												"retry": 0,
-												"retryIntervalInSeconds": 30,
-												"secureOutput": false,
-												"secureInput": false
-											},
-											"userProperties": [],
-											"typeProperties": {
-												"source": {
-													"type": "BinarySource",
-													"storeSettings": {
-														"type": "AzureBlobStorageReadSettings",
-														"recursive": true
-													},
-													"formatSettings": {
-														"type": "BinaryReadSettings"
-													}
-												},
-												"sink": {
-													"type": "BinarySink",
-													"storeSettings": {
-														"type": "AzureBlobStorageWriteSettings"
-													}
-												},
-												"enableStaging": false
-											},
-											"inputs": [
-												{
-													"referenceName": "ds_storedata",
-													"type": "DatasetReference",
-													"parameters": {}
-												}
-											],
-											"outputs": [
-												{
-													"referenceName": "ouputfolder",
-													"type": "DatasetReference",
-													"parameters": {
-														"outputFolder": "output1"
-													}
-												}
-											]
-										}
-									]
-								},
-								{
-									"value": "Case2",
-									"activities": [
-										{
-											"name": "Copy data2",
-											"type": "Copy",
-											"dependsOn": [],
-											"policy": {
-												"timeout": "7.00:00:00",
-												"retry": 0,
-												"retryIntervalInSeconds": 30,
-												"secureOutput": false,
-												"secureInput": false
-											},
-											"userProperties": [],
-											"typeProperties": {
-												"source": {
-													"type": "BinarySource",
-													"storeSettings": {
-														"type": "AzureBlobStorageReadSettings",
-														"recursive": true
-													},
-													"formatSettings": {
-														"type": "BinaryReadSettings"
-													}
-												},
-												"sink": {
-													"type": "BinarySink",
-													"storeSettings": {
-														"type": "AzureBlobStorageWriteSettings"
-													}
-												},
-												"enableStaging": false
-											},
-											"inputs": [
-												{
-													"referenceName": "ds_storedata",
-													"type": "DatasetReference",
-													"parameters": {}
-												}
-											],
-											"outputs": [
-												{
-													"referenceName": "ouputfolder",
-													"type": "DatasetReference",
-													"parameters": {
-														"outputFolder": "ooutput2"
-													}
-												}
-											]
-										}
-									]
-								}
-							]
-						}
-					}
-				],
-				"parameters": {
-					"Folder": {
-						"type": "string",
-						"defaultValue": "output1"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_storedata')]",
-				"[concat(variables('factoryId'), '/datasets/ouputfolder')]"
+				"[concat(variables('factoryId'), '/datasets/ds_emp')]",
+				"[concat(variables('factoryId'), '/datasets/ds_dept')]",
+				"[concat(variables('factoryId'), '/datasets/ds_empdeptdemo')]"
 			]
 		}
 	]
