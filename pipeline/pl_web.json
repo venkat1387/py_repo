@@ -15,12 +15,24 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": "http://dummy.restapiexample.com/api/v1/employees",
+					"url": "http://dummy.restapiexample.com/api/v1/create",
 					"connectVia": {
 						"referenceName": "AutoResolveIntegrationRuntime",
 						"type": "IntegrationRuntimeReference"
 					},
-					"method": "GET"
+					"method": "POST",
+					"headers": {
+						"json_name": "app_json"
+					},
+					"body": {
+						"status": "success",
+						"data": {
+							"name": "test",
+							"salary": "123",
+							"age": "23",
+							"id": 25
+						}
+					}
 				}
 			}
 		],
