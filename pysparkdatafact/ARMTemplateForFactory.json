@@ -193,6 +193,50 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_dataflow')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "d_flow_demo",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"empsrc": {},
+									"deptsrc": {},
+									"empdeptoutput": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Coarse"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/d_flow_demo')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_demo')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1220,7 +1264,20 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "Deptno",
+						"type": "String"
+					},
+					{
+						"name": "Dname",
+						"type": "String"
+					},
+					{
+						"name": "Loc",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
@@ -1635,58 +1692,13 @@
 							"name": "empdeptjoin"
 						}
 					],
-					"script": "source(output(\n\t\tEMPNO as string,\n\t\tENAME as string,\n\t\tJOB as string,\n\t\tMGR as string,\n\t\tHIREDATE as string,\n\t\tSAL as string,\n\t\tCOMM as string,\n\t\tDEPTNO as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> empsrc\nsource(output(\n\t\tDeptno as string,\n\t\tDname as string,\n\t\tLoc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> deptsrc\nempsrc, deptsrc join(empsrc@DEPTNO == deptsrc@Deptno,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> empdeptjoin\nempdeptjoin sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['empdeptdemo'],\n\tmapColumn(\n\t\tEMPNO,\n\t\tENAME,\n\t\tJOB,\n\t\tDeptno = deptsrc@Deptno,\n\t\tDname,\n\t\tLoc\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapOutputs: true) ~> empdeptoutput"
+					"script": "source(output(\n\t\tEMPNO as string,\n\t\tENAME as string,\n\t\tJOB as string,\n\t\tMGR as string,\n\t\tHIREDATE as string,\n\t\tSAL as string,\n\t\tCOMM as string,\n\t\tDEPTNO as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> empsrc\nsource(output(\n\t\tDeptno as string,\n\t\tDname as string,\n\t\tLoc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> deptsrc\nempsrc, deptsrc join(empsrc@DEPTNO == deptsrc@Deptno,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> empdeptjoin\nempdeptjoin sink(input(\n\t\tDeptno as string,\n\t\tDname as string,\n\t\tLoc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['empdeptdemo'],\n\tmapColumn(\n\t\tEMPNO,\n\t\tENAME,\n\t\tJOB,\n\t\tDeptno = deptsrc@Deptno,\n\t\tDname,\n\t\tLoc\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapOutputs: true) ~> empdeptoutput"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_emp')]",
 				"[concat(variables('factoryId'), '/datasets/ds_dept')]",
 				"[concat(variables('factoryId'), '/datasets/ds_empdeptdemo')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_dataflow')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Data flow1",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "d_flow_demo",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"empsrc": {},
-									"deptsrc": {},
-									"empdeptoutput": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Coarse"
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
-				"[concat(variables('factoryId'), '/dataflows/d_flow_demo')]"
 			]
 		}
 	]
