@@ -58,7 +58,10 @@
 											"referenceName": "ouputfolder",
 											"type": "DatasetReference",
 											"parameters": {
-												"outputFolder": "output1"
+												"outputFolder": {
+													"value": "@pipeline().parameters.Folder",
+													"type": "Expression"
+												}
 											}
 										}
 									]
@@ -110,7 +113,10 @@
 											"referenceName": "ouputfolder",
 											"type": "DatasetReference",
 											"parameters": {
-												"outputFolder": "ooutput2"
+												"outputFolder": {
+													"value": "@pipeline().parameters.Folder",
+													"type": "Expression"
+												}
 											}
 										}
 									]
