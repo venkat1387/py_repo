@@ -1,0 +1,32 @@
+{
+	"name": "df_filter",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_emp",
+						"type": "DatasetReference"
+					},
+					"name": "empdept10"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_empdeptdemo",
+						"type": "DatasetReference"
+					},
+					"name": "sinkemp"
+				}
+			],
+			"transformations": [
+				{
+					"name": "empdept"
+				}
+			],
+			"script": "source(output(\n\t\tEMPNO as string,\n\t\tENAME as string,\n\t\tJOB as string,\n\t\tMGR as string,\n\t\tHIREDATE as string,\n\t\tSAL as string,\n\t\tCOMM as string,\n\t\tDEPTNO as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> empdept10\nempdept10 filter(equals(DEPTNO, '10')) ~> empdept\nempdept sink(input(\n\t\tDeptno as string,\n\t\tDname as string,\n\t\tLoc as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['empdept10.csv'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sinkemp"
+		}
+	}
+}
