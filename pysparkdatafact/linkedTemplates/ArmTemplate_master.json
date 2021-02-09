@@ -55,9 +55,6 @@
 					},
 					"lk_sr_to_oracle_onprem_connectionString": {
 						"value": "[parameters('lk_sr_to_oracle_onprem_connectionString')]"
-					},
-					"ls_param_db_connectionString": {
-						"value": "[parameters('ls_param_db_connectionString')]"
 					}
 				}
 			},
@@ -76,6 +73,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"ls_param_db_connectionString": {
+						"value": "[parameters('ls_param_db_connectionString')]"
 					}
 				}
 			},

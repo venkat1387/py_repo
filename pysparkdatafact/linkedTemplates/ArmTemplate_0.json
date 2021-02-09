@@ -14,10 +14,6 @@
 		"lk_sr_to_oracle_onprem_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'lk_sr_to_oracle_onprem'"
-		},
-		"ls_param_db_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_param_db'"
 		}
 	},
 	"variables": {
@@ -368,6 +364,61 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_empjson')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_to_abls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "emp.json",
+						"folderPath": "input",
+						"container": "py-src"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string"
+						},
+						"name": {
+							"type": "string"
+						},
+						"skills": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"address": {
+							"type": "object",
+							"properties": {
+								"buliding": {
+									"type": "string"
+								},
+								"street": {
+									"type": "string"
+								},
+								"state": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_input_binary_data')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -434,6 +485,64 @@
 						"container": "py-src"
 					}
 				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_unpivot_emp')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_to_abls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "emppivot.csv",
+						"folderPath": "input",
+						"container": "py-src"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "DEPTNO",
+						"type": "String"
+					},
+					{
+						"name": "ANALYST",
+						"type": "String"
+					},
+					{
+						"name": "CLERK",
+						"type": "String"
+					},
+					{
+						"name": "MANAGER",
+						"type": "String"
+					},
+					{
+						"name": "PRESIDENT",
+						"type": "String"
+					},
+					{
+						"name": "SALESMAN",
+						"type": "String"
+					},
+					{
+						"name": "doctor",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
@@ -543,97 +652,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/SelfHosted-IR')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_param_db')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"parameters": {
-					"p_host": {
-						"type": "string"
-					},
-					"p_sid": {
-						"type": "string"
-					},
-					"p_user": {
-						"type": "string"
-					},
-					"p_pwd": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "Oracle",
-				"typeProperties": {
-					"connectionString": "[parameters('ls_param_db_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "SelfHosted-IR",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/SelfHosted-IR')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_unpivot_emp')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_sink_to_abls",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "emppivot.csv",
-						"folderPath": "input",
-						"container": "py-src"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "DEPTNO",
-						"type": "String"
-					},
-					{
-						"name": "ANALYST",
-						"type": "String"
-					},
-					{
-						"name": "CLERK",
-						"type": "String"
-					},
-					{
-						"name": "MANAGER",
-						"type": "String"
-					},
-					{
-						"name": "PRESIDENT",
-						"type": "String"
-					},
-					{
-						"name": "SALESMAN",
-						"type": "String"
-					},
-					{
-						"name": "doctor",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
 			]
 		}
 	]
