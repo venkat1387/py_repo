@@ -2028,6 +2028,146 @@
 				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/dataflows/df_pivot')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_unpivot_emp')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_to_abls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "emppivot.csv",
+						"folderPath": "input",
+						"container": "py-src"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "DEPTNO",
+						"type": "String"
+					},
+					{
+						"name": "ANALYST",
+						"type": "String"
+					},
+					{
+						"name": "CLERK",
+						"type": "String"
+					},
+					{
+						"name": "MANAGER",
+						"type": "String"
+					},
+					{
+						"name": "PRESIDENT",
+						"type": "String"
+					},
+					{
+						"name": "SALESMAN",
+						"type": "String"
+					},
+					{
+						"name": "doctor",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_surgate')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_emp",
+								"type": "DatasetReference"
+							},
+							"name": "employee"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_empdeptdemo",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SurrogateKey1"
+						}
+					],
+					"script": "source(output(\n\t\tEMPNO as integer,\n\t\tENAME as string,\n\t\tJOB as string,\n\t\tMGR as string,\n\t\tHIREDATE as string,\n\t\tSAL as integer,\n\t\tCOMM as string,\n\t\tDEPTNO as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tpreferredIntegralType: 'integer') ~> employee\nemployee keyGenerate(output({employee num} as long),\n\tstartAt: 111L) ~> SurrogateKey1\nSurrogateKey1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['emp_surgate.csv'],\n\tmapColumn(\n\t\t{employee number} = {employee num},\n\t\tENAME,\n\t\tJOB,\n\t\tMGR,\n\t\tHIREDATE,\n\t\tSAL,\n\t\tCOMM,\n\t\tDEPTNO,\n\t\tEMPNO\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_emp')]",
+				"[concat(variables('factoryId'), '/datasets/ds_empdeptdemo')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_surgage')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_surgate",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"employee": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/dataflows/df_surgate')]"
+			]
 		}
 	]
 }
