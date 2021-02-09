@@ -1,0 +1,20 @@
+{
+	"name": "df_empjson",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_empjson",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"script": "source(output(\n\t\tid as string,\n\t\tname as string,\n\t\tskills as string[],\n\t\taddress as (buliding as string, street as string, state as string)\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'singleDocument') ~> source1"
+		}
+	}
+}
