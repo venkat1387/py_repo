@@ -1,0 +1,50 @@
+{
+	"name": "ds_empjson",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sink_to_abls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "emp.json",
+				"folderPath": "input",
+				"container": "py-src"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"skills": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"address": {
+					"type": "object",
+					"properties": {
+						"buliding": {
+							"type": "string"
+						},
+						"street": {
+							"type": "string"
+						},
+						"state": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		}
+	}
+}
