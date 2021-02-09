@@ -1,0 +1,53 @@
+{
+	"name": "ds_unpivot_emp",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sink_to_abls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "emppivot.csv",
+				"folderPath": "input",
+				"container": "py-src"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "DEPTNO",
+				"type": "String"
+			},
+			{
+				"name": "ANALYST",
+				"type": "String"
+			},
+			{
+				"name": "CLERK",
+				"type": "String"
+			},
+			{
+				"name": "MANAGER",
+				"type": "String"
+			},
+			{
+				"name": "PRESIDENT",
+				"type": "String"
+			},
+			{
+				"name": "SALESMAN",
+				"type": "String"
+			},
+			{
+				"name": "doctor",
+				"type": "String"
+			}
+		]
+	}
+}
