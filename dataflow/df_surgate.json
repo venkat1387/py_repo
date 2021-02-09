@@ -1,0 +1,32 @@
+{
+	"name": "df_surgate",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_emp",
+						"type": "DatasetReference"
+					},
+					"name": "employee"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_empdeptdemo",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SurrogateKey1"
+				}
+			],
+			"script": "source(output(\n\t\tEMPNO as integer,\n\t\tENAME as string,\n\t\tJOB as string,\n\t\tMGR as string,\n\t\tHIREDATE as string,\n\t\tSAL as integer,\n\t\tCOMM as string,\n\t\tDEPTNO as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tpreferredIntegralType: 'integer') ~> employee\nemployee keyGenerate(output({employee num} as long),\n\tstartAt: 111L) ~> SurrogateKey1\nSurrogateKey1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['emp_surgate.csv'],\n\tmapColumn(\n\t\t{employee number} = {employee num},\n\t\tENAME,\n\t\tJOB,\n\t\tMGR,\n\t\tHIREDATE,\n\t\tSAL,\n\t\tCOMM,\n\t\tDEPTNO,\n\t\tEMPNO\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}
