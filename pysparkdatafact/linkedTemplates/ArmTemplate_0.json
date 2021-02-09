@@ -361,20 +361,7 @@
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": [
-					{
-						"name": "Deptno",
-						"type": "String"
-					},
-					{
-						"name": "Dname",
-						"type": "String"
-					},
-					{
-						"name": "Loc",
-						"type": "String"
-					}
-				]
+				"schema": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_sink_to_abls')]"
